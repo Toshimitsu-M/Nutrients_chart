@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"
+    integrity="sha512-VMsZqo0ar06BMtg0tPsdgRADvl0kDHpTbugCBBrL55KmucH6hP9zWdLIWY//OTfMnzz6xWQRxQqsUFefwHuHyg=="
+    crossorigin="anonymous"></script>
+    <script
+    src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@next/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Nutrients_chart</title>
+</head>
+<body>
+    <h1>一日の推奨量とそれを満たすために必要な可食部量（g）</h1>
+    <div style="width:1500px">
+        <canvas id="mychart-bar"></canvas>
+    </div>
+    <script>
+        var ctx = document.getElementById('mychart-bar');
+        var nutrients_n = 34;
+        var Nutrients = ["カルシウム", "マグネシウム", "リン"];
+        var food_n = null;
+        var food_name = ["加工品　干しえび", "かたくちいわし　田作り"];
+
+        var day_recommended_amount_mg = [800, 340, 1000];
+        var day_recommended_amount_g = [];
+        var d_rec_mg = day_recommended_amount_mg;
+        var d_rec_g = day_recommended_amount_g;
+        for (var i=0; i<nutrients_n; i++){
+            n = d_rec_mg[i] * 0.01;
+            d_rec_g.push(n);
+        }
+
+
+        var food_ingredient_amount_per_HND_g_edibles = [];
+        var ingredient_amount_per_HND_g_edibles = [[7100,520,990],[2500,0,2300]];
+        
+        //単配列の宣言
+        // var ing = [];
+        
+        // // //上記の配列に格納するための配列
+        // var f_ing = [];
+        // f_ing[0] = [7100, 520, 990];
+        // f_ing[1] = [2500, 10, 2300];
+        
+        // //sampleをarrayに格納する
+        // ing.push(f_ing);
+        // ing = [[7100,520], 2500];
+        // ing[0][0] = [7100, 520];
+        // ing[0][1] = 2500;
+        // ing[0][2] = null;
+        // ing[1][0] = null;
+        // ing[1][1] = null;
+
+
+        var edibles_of_fulfill_day_recommended_amount = [];
+        
+
+        
+        
+        var ing = ingredient_amount_per_HND_g_edibles;
+        var edi = edibles_of_fulfill_day_recommended_amount;
+        
+        //2次元配列を初期化(3行10列の2次元配列)
+        var arr = new Array(3);	//0～2
+
+        for (var i = 0; i < arr.length; i++){
+            arr[i] = new Array(10);	//0～9
+        }
+
+        //2次元配列に値をセット
+
+        for (var i = 0; i < arr.length; i++){
+            for (var j = 0; j < arr[i].length; j++){
+                arr[i][j] = i +','+ j ;
+            }
+        }
+
+        //2次元配列の内容を表示
+        for (var i = 0; i < arr.length; i++){
+            for (var j = 0; j < arr[i].length; j++){
+                document.writeln(arr[i][j]);
+            }
+            document.write("<br />");
+        }
+
+        for (var i=0; i<nutrients_n; i++){
+
+        }
+        edi[0] = 100 * d_rec_mg[0] / ing[0][0];
+        edi[1] = 100 * d_rec_mg[0] / ing[1][0];
+        edi[2] = 100 * d_rec_mg[1] / ing[0][1];
+        edi[3] = 100 * d_rec_mg[1] / ing[1][1];
+        edi[4] = 100 * d_rec_mg[2] / ing[0][2];
+        edi[5] = 100 * d_rec_mg[2] / ing[1][2];
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: ['1日の推奨量(g)', food_name[0], food_name[1]],
+            datasets: [{
+                label: Nutrients[0],
+                data: [d_rec_g[0], edi[0], edi[1]],
+                backgroundColor: '#f88',
+                }, {
+                label: Nutrients[1],
+                data: [d_rec_g[1], edi[2], edi[3]],
+                backgroundColor: '#484',
+                }, {
+                label: Nutrients[2],
+                data: [d_rec_g[2], edi[4], edi[5]],
+                backgroundColor: '#48f',
+            }],
+        },
+        });
+    </script>
+</body>
+</html>
+
